@@ -117,10 +117,69 @@ private:
         substitutions_["@START@"] = buf;
     }
     
+    void fill_FIRST() {
+        for (int i = 0; i < termRules_.size(); ++i) {
+            FIRST[termRules_[i].left].insert(termRules_[i].right[0]);
+        }
+        bool changing = true;
+        while (changing) {
+            changing = false;
+            for (int i = 0; i < nonTermRules_.size(); ++i) {
+                int sz = FIRST[nonTermRules_[i].left].size();
+                int x = 0;
+                while (nonTermRules_[i].rightIsUserCode[x])
+                    ++x;
+                for (std::set<char>::const_iterator it = FIRST[nonTermRules_[i].right[x]].begin(); it != FIRST[nonTermRules_[i].right[x]].end(); ++it)
+                    FIRST[nonTermRules_[i].left].insert(*it);
+                if (sz != FIRST[nonTermRules_[i].left].size())
+                    changing = true;
+            }
+        }
+#ifdef DEBUG_LOG
+        std::set<int> nonTermsWrittenDEB;
+        std::cout << "DEBUG: FIRST" << std::endl;
+        for (int i = 0; i < nonTermRules_.size(); ++i) {
+            if (nonTermsWrittenDEB.find(nonTermRules_[i].left) == nonTermsWrittenDEB.end()) {
+                nonTermsWrittenDEB.insert(nonTermRules_[i].left);
+                std::cout << " " << nonTermRules_[i].left << ": ";
+                for (std::set<char>::const_iterator it = FIRST[nonTermRules_[i].left].begin(); it != FIRST[nonTermRules_[i].left].end(); ++it)
+                    std::cout << *it;
+                std::cout << std::endl;
+            }
+        }
+#endif
+    }
+    
+    void fill_FOLLOW() {
+        bool changing = true;
+        while (changing) {
+            changing = false;
+            for (int i = 0; i < nonTermRules_.size(); ++i) {
+                int sz = FOLLOW[nonTermRules_[i].left].size();
+                
+                if (sz != FOLLOW[nonTermRules_[i].left].size())
+                    changing = true;
+            }
+        }
+    }
+    
     void gen_NONTERMS_FUNC_DEFINITIONS() {
+        fill_FIRST();
+        fill_FOLLOW();
+        
         std::string res = "";
         
-        
+        std::set<int> nonTermsWritten;
+        for (int i = 0; i < nonTermRules_.size(); ++i) {
+            if (nonTermsWritten.find(nonTermRules_[i].left) == nonTermsWritten.end()) {
+                nonTermsWritten.insert(nonTermRules_[i].left);
+                char buf[1024];
+                sprintf(buf, "Tree* Parser::NONTERM_%d() {\n", nonTermRules_[i].left);
+                res += buf;
+                
+                res += "}\n\n";
+            }
+        }
         
         substitutions_["@NONTERMS_FUNC_DEFINITIONS@"] = res;
     }
@@ -193,7 +252,7 @@ private:
                     std::cout << " " << newNonTermRule.right[i];
                 }
             }
-            std::cout << std::endl;
+            std::cout << "]" << std::endl;
 #endif
         }
     }
@@ -227,6 +286,8 @@ private:
             aCopy = aCopy.substr(1);
         while (aCopy[aCopy.length() - 1] == ' ')
             aCopy = aCopy.substr(0, aCopy.length() - 1);
+        if (aCopy == "eps")
+            return -1;
         if (toNumber_.find(aCopy) != toNumber_.end()) {
             return toNumber_[aCopy];
         } else {
@@ -242,6 +303,8 @@ private:
     std::vector<TermRule> termRules_;
     std::vector<std::string> userCode_;
     std::map<std::string, std::string> substitutions_;
+    std::map<int, std::set<char> > FIRST;
+    std::map<int, std::set<char> > FOLLOW;
 };
 
 int main(int argc, char* argv[]) {
