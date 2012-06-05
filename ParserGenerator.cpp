@@ -126,21 +126,22 @@ private:
     
     void fill_FIRST() {
         for (int i = 0; i < termRules_.size(); ++i) {
-            FIRST[termRules_[i].left].insert(termRules_[i].right[0]);
+            FIRST[termRules_[i].left].insert(termRules_[i].left);
         }
-        FIRST[-1].insert('#');  //eps
+        FIRST[-1].insert(-1);  //eps
         bool changing = true;
         while (changing) {
             changing = false;
             for (int i = 0; i < nonTermRules_.size(); ++i) {
-                int sz = FIRST[nonTermRules_[i].left].size();
+                int A = nonTermRules_[i].left;
+                int sz = FIRST[A].size();
                 
                 int x = 0;
                 while (nonTermRules_[i].rightIsUserCode[x])
                     ++x;
-                setUnion(FIRST[nonTermRules_[i].left], FIRST[nonTermRules_[i].right[x]]);
+                setUnion(FIRST[A], FIRST[nonTermRules_[i].right[x]]);
                 
-                if (sz != FIRST[nonTermRules_[i].left].size())
+                if (sz != FIRST[A].size())
                     changing = true;
             }
         }
@@ -150,9 +151,9 @@ private:
         for (int i = 0; i < nonTermRules_.size(); ++i) {
             if (nonTermsWrittenDEB.find(nonTermRules_[i].left) == nonTermsWrittenDEB.end()) {
                 nonTermsWrittenDEB.insert(nonTermRules_[i].left);
-                std::cout << " " << nonTermRules_[i].left << ": ";
-                for (std::set<char>::const_iterator it = FIRST[nonTermRules_[i].left].begin(); it != FIRST[nonTermRules_[i].left].end(); ++it)
-                    std::cout << *it;
+                std::cout << " " << nonTermRules_[i].left << ":";
+                for (std::set<int>::const_iterator it = FIRST[nonTermRules_[i].left].begin(); it != FIRST[nonTermRules_[i].left].end(); ++it)
+                    std::cout << " " << *it;
                 std::cout << std::endl;
             }
         }
@@ -160,7 +161,7 @@ private:
     }
     
     void fill_FOLLOW() {
-        FOLLOW[nonTermRules_[0].left].insert('$');
+        FOLLOW[nonTermRules_[0].left].insert(-2);  //dollar '$' [END]
         bool changing = true;
         while (changing) {
             changing = false;
@@ -180,8 +181,8 @@ private:
                     int gamma = nonTermRules_[i].right[x];
                     
                     setUnion(FOLLOW[B], FIRST[gamma]);
-                    FOLLOW[B].erase('#');  //eps
-                    if (FIRST[gamma].find('#') != FIRST[gamma].end())
+                    FOLLOW[B].erase(-1);  //eps
+                    if (FIRST[gamma].find(-1) != FIRST[gamma].end())
                         setUnion(FOLLOW[B], FOLLOW[A]);
                     
                     if (sz != FOLLOW[B].size())
@@ -195,9 +196,9 @@ private:
         for (int i = 0; i < nonTermRules_.size(); ++i) {
             if (nonTermsWrittenDEB.find(nonTermRules_[i].left) == nonTermsWrittenDEB.end()) {
                 nonTermsWrittenDEB.insert(nonTermRules_[i].left);
-                std::cout << " " << nonTermRules_[i].left << ": ";
-                for (std::set<char>::const_iterator it = FOLLOW[nonTermRules_[i].left].begin(); it != FOLLOW[nonTermRules_[i].left].end(); ++it)
-                    std::cout << *it;
+                std::cout << " " << nonTermRules_[i].left << ":";
+                for (std::set<int>::const_iterator it = FOLLOW[nonTermRules_[i].left].begin(); it != FOLLOW[nonTermRules_[i].left].end(); ++it)
+                    std::cout << " " << *it;
                 std::cout << std::endl;
             }
         }
@@ -334,6 +335,9 @@ private:
         } else {
             int newNumber = toNumber_.size();
             toNumber_[aCopy] = newNumber;
+#ifdef DEBUG_LOG
+            std::cout << "DEBUG: num[" << aCopy << "] = " << newNumber << std::endl;
+#endif
             return newNumber;
         }
     }
@@ -344,8 +348,8 @@ private:
     std::vector<TermRule> termRules_;
     std::vector<std::string> userCode_;
     std::map<std::string, std::string> substitutions_;
-    std::map<int, std::set<char> > FIRST;
-    std::map<int, std::set<char> > FOLLOW;
+    std::map<int, std::set<int> > FIRST;
+    std::map<int, std::set<int> > FOLLOW;
 };
 
 int main(int argc, char* argv[]) {
