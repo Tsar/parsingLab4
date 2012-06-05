@@ -20,6 +20,13 @@ struct TermRule {
     std::string right;
 };
 
+template <class T>
+void setUnion(std::set<T>& targetSet, std::set<T> const& otherSet) {
+    for (typename std::set<T>::const_iterator it = otherSet.begin(); it != otherSet.end(); ++it) {
+        targetSet.insert(*it);
+    }
+}
+
 class Grammar {
 public:
     Grammar(std::string const& name)
@@ -127,11 +134,12 @@ private:
             changing = false;
             for (int i = 0; i < nonTermRules_.size(); ++i) {
                 int sz = FIRST[nonTermRules_[i].left].size();
+                
                 int x = 0;
                 while (nonTermRules_[i].rightIsUserCode[x])
                     ++x;
-                for (std::set<char>::const_iterator it = FIRST[nonTermRules_[i].right[x]].begin(); it != FIRST[nonTermRules_[i].right[x]].end(); ++it)
-                    FIRST[nonTermRules_[i].left].insert(*it);
+                setUnion(FIRST[nonTermRules_[i].left], FIRST[nonTermRules_[i].right[x]]);
+                
                 if (sz != FIRST[nonTermRules_[i].left].size())
                     changing = true;
             }
@@ -152,16 +160,48 @@ private:
     }
     
     void fill_FOLLOW() {
+        FOLLOW[nonTermRules_[0].left].insert('$');
         bool changing = true;
         while (changing) {
             changing = false;
             for (int i = 0; i < nonTermRules_.size(); ++i) {
-                int sz = FOLLOW[nonTermRules_[i].left].size();
-                
-                if (sz != FOLLOW[nonTermRules_[i].left].size())
-                    changing = true;
+                int A = nonTermRules_[i].left;
+                for (int j = 0; j < nonTermRules_[i].right.size(); ++j) {
+                    if (nonTermRules_[i].rightIsUserCode[j])
+                        continue;
+                    int B = nonTermRules_[i].right[j];
+                    int sz = FOLLOW[B].size();
+                    
+                    int x = j + 1;
+                    while (x < nonTermRules_[i].right.size() && nonTermRules_[i].rightIsUserCode[x])
+                        ++x;
+                    if (x == nonTermRules_[i].right.size())
+                        continue;
+                    int gamma = nonTermRules_[i].right[x];
+                    
+                    setUnion(FOLLOW[B], FIRST[gamma]);
+                    FOLLOW[B].erase('#');  //eps
+                    if (FIRST[gamma].find('#') != FIRST[gamma].end())
+                        setUnion(FOLLOW[B], FOLLOW[A]);
+                    
+                    if (sz != FOLLOW[B].size())
+                        changing = true;
+                }
             }
         }
+#ifdef DEBUG_LOG
+        std::set<int> nonTermsWrittenDEB;
+        std::cout << "DEBUG: FOLLOW" << std::endl;
+        for (int i = 0; i < nonTermRules_.size(); ++i) {
+            if (nonTermsWrittenDEB.find(nonTermRules_[i].left) == nonTermsWrittenDEB.end()) {
+                nonTermsWrittenDEB.insert(nonTermRules_[i].left);
+                std::cout << " " << nonTermRules_[i].left << ": ";
+                for (std::set<char>::const_iterator it = FOLLOW[nonTermRules_[i].left].begin(); it != FOLLOW[nonTermRules_[i].left].end(); ++it)
+                    std::cout << *it;
+                std::cout << std::endl;
+            }
+        }
+#endif
     }
     
     void gen_NONTERMS_FUNC_DEFINITIONS() {
