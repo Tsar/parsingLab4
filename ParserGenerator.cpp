@@ -71,7 +71,18 @@ private:
     void gen_CUR_CHAR_SWITCH() {
         std::string res = "";
         
-        
+        for (int i = 0; i < termRules_.size(); ++i) {
+            res += "        case '" + termRules_[i].right.substr(0, 1) + "':\n";
+            for (int j = 0; j < termRules_[i].right.length() - 1; ++j) {
+                res += "            nextChar();\n            if (curChar_ != '" + termRules_[i].right.substr(j + 1, 1) +
+                       "')\n                throw ParseException(std::string(\"Illegal character '\") + curChar_ + std::string(\"' at position\"), curPos_);\n";
+            }
+            res += "            nextChar();\n";
+            char buf[1024];
+            sprintf(buf, "TOKEN_%d", termRules_[i].left);
+            std::string sbuf = buf;
+            res += "            curToken_ = " + sbuf + ";\n            break;\n";
+        }
         
         substitutions_["@CUR_CHAR_SWITCH@"] = res;
     }
