@@ -176,9 +176,11 @@ private:
                     int x = j + 1;
                     while (x < nonTermRules_[i].right.size() && nonTermRules_[i].rightIsUserCode[x])
                         ++x;
+                    int gamma;
                     if (x == nonTermRules_[i].right.size())
-                        continue;
-                    int gamma = nonTermRules_[i].right[x];
+                        gamma = -1;
+                    else
+                        gamma = nonTermRules_[i].right[x];
                     
                     setUnion(FOLLOW[B], FIRST[gamma]);
                     FOLLOW[B].erase(-1);  //eps
