@@ -39,6 +39,7 @@ public:
             parseNewRule(s, ++lineNum);
         }
         f.close();
+        fromNumber_[-1] = "eps";
     }
     
     ~Grammar() {
@@ -220,8 +221,46 @@ private:
                 char buf[1024];
                 sprintf(buf, "Tree* Parser::NONTERM_%d() {\n", nonTermRules_[i].left);
                 res += buf;
-                
-                res += "}\n\n";
+                res += "    Tree* res = new Tree(\"" + fromNumber_[nonTermRules_[i].left] + "\");\n";
+                res += "    switch (lex_->curToken()) {\n";
+                for (int j = 0; j < nonTermRules_.size(); ++j) {
+                    if (nonTermRules_[i].left != nonTermRules_[j].left)
+                        continue;
+                    int x = 0;
+                    while (nonTermRules_[j].rightIsUserCode[x])
+                        ++x;
+                    int alpha = nonTermRules_[j].right[x];
+                    if (FIRST[alpha].find(-1) == FIRST[alpha].end()) {
+                        for (std::set<int>::const_iterator it = FIRST[alpha].begin(); it != FIRST[alpha].end(); ++it) {
+                            sprintf(buf, "        case TOKEN_%d:\n", *it);
+                            res += buf;
+                            for (int k = 0; k < nonTermRules_[j].right.size(); ++k) {
+                                if (nonTermRules_[j].rightIsUserCode[k]) {
+                                    res += "            " + userCode_[nonTermRules_[j].right[k]] + "  //user code\n";
+                                } else {
+                                    int X = nonTermRules_[j].right[k];
+                                    res += "            //" + fromNumber_[X] + "\n";
+                                    if (terms_.find(X) != terms_.end()) {
+                                        char buf2[1024];
+                                        sprintf(buf2, "TOKEN_%d", X);
+                                        std::string sbuf2 = buf2;
+                                        res += "            if (lex_->curToken() != " + sbuf2 + ")\n                throw ParseException(\"Terminal '" + fromNumber_[X] + "' expected at position\", lex_->curPos() - 1);\n";
+                                        res += "            res->addChild(new Tree(\"" + fromNumber_[X] + "\"));\n            lex_->nextToken();\n";
+                                    } else {
+                                        char buf2[1024];
+                                        sprintf(buf2, "NONTERM_%d", X);
+                                        std::string sbuf2 = buf2;
+                                        res += "            res->addChild(" + sbuf2 + "());\n";
+                                    }
+                                }
+                            }
+                            res += "            break;\n";
+                        }
+                    } else {
+                        
+                    }
+                }
+                res += "        default:\n            throw ParseException(\"Unexpected token at position\", lex_->curPos() - 1);\n    }\n    return res;\n}\n\n";
             }
         }
         
@@ -244,6 +283,7 @@ private:
                 TermRule newTermRule;
                 newTermRule.left = toNumber(s.substr(0, p1));
                 newTermRule.right = s.substr(p2 + 1, p3 - p2 - 1);
+                terms_.insert(newTermRule.left);
                 termRules_.push_back(newTermRule);
 #ifdef DEBUG_LOG
                 std::cout << "DEBUG: added term rule     [" << newTermRule.left << ": '" << newTermRule.right << "']" << std::endl;
@@ -337,6 +377,7 @@ private:
         } else {
             int newNumber = toNumber_.size();
             toNumber_[aCopy] = newNumber;
+            fromNumber_[newNumber] = aCopy;
 #ifdef DEBUG_LOG
             std::cout << "DEBUG: num[" << aCopy << "] = " << newNumber << std::endl;
 #endif
@@ -346,8 +387,10 @@ private:
 
     std::string dirName_;
     std::map<std::string, int> toNumber_;
+    std::map<int, std::string> fromNumber_;
     std::vector<NonTermRule> nonTermRules_;
     std::vector<TermRule> termRules_;
+    std::set<int> terms_;
     std::vector<std::string> userCode_;
     std::map<std::string, std::string> substitutions_;
     std::map<int, std::set<int> > FIRST;
