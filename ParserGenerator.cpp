@@ -38,8 +38,16 @@ public:
     }
     
     void generateParser() {
+        if (nonTermRules_.empty()) {
+            std::cerr << "No rules for non-terminals" << std::endl;
+            return;
+        }
+        
         gen_TOKENS();
         gen_CUR_CHAR_SWITCH();
+        gen_NONTERMS_FUNC_DECLARATIONS();
+        gen_START();
+        gen_NONTERMS_FUNC_DEFINITIONS();
         
         mkdir(dirName_.c_str(), 0777);
         std::ifstream templatesListFile("ParserGeneratorTemplates/TemplatesList.txt");
@@ -85,6 +93,36 @@ private:
         }
         
         substitutions_["@CUR_CHAR_SWITCH@"] = res;
+    }
+    
+    void gen_NONTERMS_FUNC_DECLARATIONS() {
+        std::string res = "";
+        
+        std::set<int> nonTermsWritten;
+        for (int i = 0; i < nonTermRules_.size(); ++i) {
+            if (nonTermsWritten.find(nonTermRules_[i].left) == nonTermsWritten.end()) {
+                nonTermsWritten.insert(nonTermRules_[i].left);
+                char buf[1024];
+                sprintf(buf, "    Tree* NONTERM_%d();\n", nonTermRules_[i].left);
+                res += buf;
+            }
+        }
+        
+        substitutions_["@NONTERMS_FUNC_DECLARATIONS@"] = res;
+    }
+    
+    void gen_START() {
+        char buf[1024];
+        sprintf(buf, "NONTERM_%d", nonTermRules_[0].left);
+        substitutions_["@START@"] = buf;
+    }
+    
+    void gen_NONTERMS_FUNC_DEFINITIONS() {
+        std::string res = "";
+        
+        
+        
+        substitutions_["@NONTERMS_FUNC_DEFINITIONS@"] = res;
     }
     
     void parseNewRule(std::string const& s, int lineNum) {
