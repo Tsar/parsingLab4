@@ -121,6 +121,7 @@ private:
         for (int i = 0; i < termRules_.size(); ++i) {
             FIRST[termRules_[i].left].insert(termRules_[i].right[0]);
         }
+        FIRST[-1].insert('#');  //eps
         bool changing = true;
         while (changing) {
             changing = false;
