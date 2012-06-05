@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <set>
 #include <map>
 #include <string>
 #include <sys/stat.h>
@@ -37,10 +38,44 @@ public:
     }
     
     void generateParser() {
-        mkdir(dirName_.c_str(), 0777);
+        gen_TOKENS();
+        gen_CUR_CHAR_SWITCH();
         
+        mkdir(dirName_.c_str(), 0777);
+        std::ifstream templatesListFile("ParserGeneratorTemplates/TemplatesList.txt");
+        while (!templatesListFile.eof()) {
+            std::string s;
+            getline(templatesListFile, s);
+            if (s != "")
+                copyAndDoSubstitutions("ParserGeneratorTemplates/" + s, dirName_ + "/" + s);
+        }
+        templatesListFile.close();
     }
 private:
+    void gen_TOKENS() {
+        std::string res = "";
+        
+        std::set<int> tokensWritten;
+        for (int i = 0; i < termRules_.size(); ++i) {
+            if (tokensWritten.find(termRules_[i].left) == tokensWritten.end()) {
+                tokensWritten.insert(termRules_[i].left);
+                char buf[1024];
+                sprintf(buf, "    TOKEN_%d,\n", termRules_[i].left);
+                res += buf;
+            }
+        }
+        
+        substitutions_["@TOKENS@"] = res;
+    }
+    
+    void gen_CUR_CHAR_SWITCH() {
+        std::string res = "";
+        
+        
+        
+        substitutions_["@CUR_CHAR_SWITCH@"] = res;
+    }
+    
     void parseNewRule(std::string const& s, int lineNum) {
         if (s == "")
             return;
@@ -114,6 +149,29 @@ private:
         }
     }
     
+    void copyAndDoSubstitutions(std::string const& source, std::string const& dest) {
+        std::string fileContents;
+        std::ifstream f(source.c_str());
+        while (!f.eof()) {
+            std::string s;
+            getline(f, s);
+            fileContents += s + "\n";
+        }
+        f.close();
+        
+        for (std::map<std::string, std::string>::const_iterator it = substitutions_.begin(); it != substitutions_.end(); ++it) {
+            size_t p = fileContents.find(it->first);
+            while (p != std::string::npos) {
+                fileContents.replace(p, it->first.length(), it->second);
+                p = fileContents.find(it->first, p + 1);
+            }
+        }
+        
+        std::ofstream g(dest.c_str());
+        g << fileContents;
+        g.close();
+    }
+    
     int toNumber(std::string const& a) {
         std::string aCopy = a;
         while (aCopy[0] == ' ')
@@ -134,6 +192,7 @@ private:
     std::vector<NonTermRule> nonTermRules_;
     std::vector<TermRule> termRules_;
     std::vector<std::string> userCode_;
+    std::map<std::string, std::string> substitutions_;
 };
 
 int main(int argc, char* argv[]) {
