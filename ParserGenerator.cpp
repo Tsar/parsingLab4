@@ -58,7 +58,8 @@ public:
         copyAndDoSubstitutions(testsFileName_, dirName_ + "/tests.txt");  //copying tests, no substitutions are made here really
         
         gen_TOKENS();
-        gen_CUR_CHAR_SWITCH();
+        //gen_CUR_CHAR_SWITCH();
+        gen_REGEX_MATCH_TRIES();
         gen_NONTERMS_FUNC_DECLARATIONS();
         gen_START();
         gen_NONTERMS_FUNC_DEFINITIONS();
@@ -89,6 +90,7 @@ private:
         substitutions_["@TOKENS@"] = res;
     }
     
+    /*
     void gen_CUR_CHAR_SWITCH() {
         std::string res = "";
         
@@ -106,6 +108,26 @@ private:
         }
         
         substitutions_["@CUR_CHAR_SWITCH@"] = res;
+    }
+    */
+    
+    void gen_REGEX_MATCH_TRIES() {
+        std::string res = "";
+        
+        res += "    if (input_.length() == 0) {\n        curToken_ = END;\n        curTokenValue_ = \"\";\n        return;\n    }\n";
+        res += "    boost::smatch regexMatchResults;\n";
+        for (int i = 0; i < termRules_.size(); ++i) {
+            char buf[1024];
+            sprintf(buf, "TOKEN_%d", termRules_[i].left);
+            std::string sbuf = buf;
+            res += "    boost::regex regex_" + sbuf + "(\"" + termRules_[i].right + "\");  //" + fromNumber_[termRules_[i].left] + "\n";
+            res += "    if (boost::regex_match(input_, regexMatchResults, regex_" + sbuf + ", boost::match_default | boost::match_partial)) {\n";
+            res += "        curToken_ = " + sbuf + ";\n        curTokenValue_ = regexMatchResults[1];\n        input_ = input_.substr(regexMatchResults[0].length());\n";
+            res += "        curPos_ += regexMatchResults[0].length();\n        return;\n    }\n";
+        }
+        res += "    throw ParseException(std::string(\"No matching regex at position\"), curPos_);\n";
+        
+        substitutions_["@REGEX_MATCH_TRIES@"] = res;
     }
     
     void gen_NONTERMS_FUNC_DECLARATIONS() {
