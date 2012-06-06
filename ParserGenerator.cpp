@@ -126,8 +126,8 @@ private:
             std::string sbuf = buf;
             res += "    boost::regex regex_" + sbuf + "(\"" + termRules_[i].right + "\");  //" + fromNumber_[termRules_[i].left] + "\n";
             res += "    if (boost::regex_search(input_, regexMatchResults, regex_" + sbuf + ", boost::match_default | boost::match_continuous)) {\n";
-            res += "        curToken_ = " + sbuf + ";\n        curTokenValue_ = regexMatchResults[1];\n        input_ = input_.substr(regexMatchResults[0].length());\n";
-            res += "        curPos_ += regexMatchResults[0].length();\n        return;\n    }\n";
+            res += "        curToken_ = " + sbuf + ";\n        curTokenValue_ = newTokenValue_;\n        newTokenValue_ = regexMatchResults[1];\n";
+            res += "        input_ = input_.substr(regexMatchResults[0].length());\n        curPos_ += regexMatchResults[0].length();\n        return;\n    }\n";
         }
         res += "    throw ParseException(std::string(\"No matching regex at position\"), curPos_);\n";
         

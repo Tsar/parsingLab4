@@ -20,6 +20,7 @@ private:
     int curPos_;
     Token curToken_;
     std::string curTokenValue_;
+    std::string newTokenValue_;
 };
 
 #endif //_LEXICAL_ANALYZER_H_

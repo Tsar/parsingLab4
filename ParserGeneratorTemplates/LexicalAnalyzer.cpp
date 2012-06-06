@@ -6,7 +6,9 @@
 
 LexicalAnalyzer::LexicalAnalyzer(std::string const& input)
     : input_(input)
-    , curPos_(0) {
+    , curPos_(0)
+    , curTokenValue_("")
+    , newTokenValue_("") {
 }
 
 void LexicalAnalyzer::nextToken() {
