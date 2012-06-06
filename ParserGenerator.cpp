@@ -11,8 +11,9 @@
 
 struct NonTermRule {
     int left;
-    std::vector<int>  right;
+    std::vector<int> right;
     std::vector<bool> rightIsUserCode;
+    std::vector<std::string> rightParams;
 };
 
 struct TermRule {
@@ -115,8 +116,8 @@ private:
             if (nonTermsWritten.find(nonTermRules_[i].left) == nonTermsWritten.end()) {
                 nonTermsWritten.insert(nonTermRules_[i].left);
                 char buf[1024];
-                sprintf(buf, "    Tree* NONTERM_%d();\n", nonTermRules_[i].left);
-                res += buf;
+                sprintf(buf, "    Tree* NONTERM_%d(", nonTermRules_[i].left);
+                res += buf + nonTermParams_[fromNumber_[nonTermRules_[i].left]] + ");\n";
             }
         }
         
@@ -223,8 +224,8 @@ private:
             if (nonTermsWritten.find(nonTermRules_[i].left) == nonTermsWritten.end()) {
                 nonTermsWritten.insert(nonTermRules_[i].left);
                 char buf[1024];
-                sprintf(buf, "Tree* Parser::NONTERM_%d() {\n", nonTermRules_[i].left);
-                res += buf;
+                sprintf(buf, "Tree* Parser::NONTERM_%d(", nonTermRules_[i].left);
+                res += buf + nonTermParams_[fromNumber_[nonTermRules_[i].left]] + ") {\n";
                 res += "    Tree* res = new Tree(\"" + fromNumber_[nonTermRules_[i].left] + "\");\n";
                 res += "    switch (lex_->curToken()) {\n";
                 for (int j = 0; j < nonTermRules_.size(); ++j) {
@@ -260,8 +261,8 @@ private:
                                     res += "            if (lex_->curToken() != " + sbuf2 + ")\n                throw ParseException(\"Terminal '" + fromNumber_[X] + "' expected at position\", lex_->curPos() - 1);\n";
                                     res += "            res->addChild(new Tree(\"" + fromNumber_[X] + "\"));\n            lex_->nextToken();\n";
                                 } else {
-                                    char buf2[1024];
-                                    sprintf(buf2, "NONTERM_%d()", X);
+                                    char buf2[4096];
+                                    sprintf(buf2, "NONTERM_%d(%s)", X, nonTermRules_[j].rightParams[k].c_str());
                                     std::string sbuf2 = (X == -1) ? "new Tree(\"eps\")" : buf2;
                                     res += "            res->addChild(" + sbuf2 + ");\n";
                                 }
@@ -304,7 +305,7 @@ private:
             }
         } else {
             NonTermRule newNonTermRule;
-            newNonTermRule.left = toNumber(s.substr(0, p1));
+            newNonTermRule.left = toNumber(s.substr(0, p1), true, true);
             std::string r = s.substr(p1 + 2);
             size_t p5, p6;
             for (int i = 0; i < r.length(); ++i) {
@@ -317,6 +318,7 @@ private:
                             userCode_.push_back(r.substr(i + 1, p5 - i - 1));
                             newNonTermRule.right.push_back(userCode_.size() - 1);
                             newNonTermRule.rightIsUserCode.push_back(true);
+                            newNonTermRule.rightParams.push_back("");
                             i = p5;
                         } else {
                             std::cerr << "Rule on line " << lineNum << " incorrect (has only '{', no '}')" << std::endl;
@@ -325,14 +327,16 @@ private:
                         break;
                     default:
                         p6 = r.find(" ", i + 1);
+                        std::string prms = "";
                         if (p6 != std::string::npos) {
-                            newNonTermRule.right.push_back(toNumber(r.substr(i, p6 - i)));
-                            newNonTermRule.rightIsUserCode.push_back(false);
+                            newNonTermRule.right.push_back(toNumber(r.substr(i, p6 - i), true, false, &prms));
                             i = p6;
                         } else {
-                            newNonTermRule.right.push_back(toNumber(r.substr(i)));
+                            newNonTermRule.right.push_back(toNumber(r.substr(i), true, false, &prms));
                             i = r.length();
                         }
+                        newNonTermRule.rightIsUserCode.push_back(false);
+                        newNonTermRule.rightParams.push_back(prms);
                         break;
                 }
             }
@@ -374,12 +378,33 @@ private:
         g.close();
     }
     
-    int toNumber(std::string const& a) {
+    int toNumber(std::string const& a, bool lookupParams = false, bool leftNonTerm = false, std::string* paramsRes = 0) {
         std::string aCopy = a;
         while (aCopy[0] == ' ')
             aCopy = aCopy.substr(1);
         while (aCopy[aCopy.length() - 1] == ' ')
             aCopy = aCopy.substr(0, aCopy.length() - 1);
+        if (lookupParams && leftNonTerm) {
+            int p1 = aCopy.find("(");
+            int p2 = aCopy.find(")");
+            if (p1 != std::string::npos && p2 != std::string::npos) {
+                std::string params = aCopy.substr(p1 + 1, p2 - p1 - 1);
+                aCopy = aCopy.substr(0, p1);
+                while (aCopy[aCopy.length() - 1] == ' ')
+                    aCopy = aCopy.substr(0, aCopy.length() - 1);
+                nonTermParams_[aCopy] = params;
+            }
+        } else if (lookupParams) {
+            int p1 = aCopy.find("(");
+            int p2 = aCopy.find(")");
+            if (p1 != std::string::npos && p2 != std::string::npos) {
+                if (paramsRes != 0)
+                    *paramsRes = aCopy.substr(p1 + 1, p2 - p1 - 1);
+                aCopy = aCopy.substr(0, p1);
+                while (aCopy[aCopy.length() - 1] == ' ')
+                    aCopy = aCopy.substr(0, aCopy.length() - 1);
+            }
+        }
         if (aCopy == "eps")
             return -1;
         if (toNumber_.find(aCopy) != toNumber_.end()) {
@@ -399,6 +424,7 @@ private:
     std::map<std::string, int> toNumber_;
     std::map<int, std::string> fromNumber_;
     std::vector<NonTermRule> nonTermRules_;
+    std::map<std::string, std::string> nonTermParams_;
     std::vector<TermRule> termRules_;
     std::set<int> terms_;
     std::vector<std::string> userCode_;
