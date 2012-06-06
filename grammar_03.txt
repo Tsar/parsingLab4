@@ -1,0 +1,11 @@
+[headers]
+#include <stdio.h>
+#include <iostream>
+[/headers]
+
+S -> E {std::cout << std::endl;}
+E -> n {$BEGIN_SCOPE$ std::cout << "("; std::string _n = $LAST_TOKEN$;} E' {std::cout << _n << ")"; $END_SCOPE$}
+E' -> E o {std::cout << $LAST_TOKEN$;} E'
+E' -> eps
+n -> "(-?\\d+)\\s*"
+o -> "(\\+|-|\\*)\\s*"
