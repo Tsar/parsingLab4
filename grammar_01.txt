@@ -1,5 +1,17 @@
-E -> n {//printf("abacaba");} E'
-E' -> E o {//readyToUseMe = true;} E' {//code.insert("xx");}
-E' -> {//xxx = xyz;}eps
+[headers]
+#include <stdio.h>
+#include <iostream>
+[/headers]
+
+[members]
+    void printSymb1() {
+        printf("_");
+    }
+[/members]
+
+S -> E {std::cout << std::endl;}
+E -> n {std::cout << $LAST_TOKEN$; printSymb1();} E'
+E' -> E o {std::cout << $LAST_TOKEN$ << "!";} E'
+E' -> eps
 n -> "(-?\\d+)\\s*"
 o -> "(\\+|-|\\*)\\s*"

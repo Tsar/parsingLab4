@@ -1,4 +1,8 @@
+[headers]
+#include <stdio.h>
+[/headers]
+
 A(int x, int y) -> {printf("%d %d\n", x, y);} X(x) {printf(" | ");} Y(y) {printf("end\n");}
-X(int x) -> q {printf("%d", x);}
+X(int x) -> q {printf("%d [%s]", x, $LAST_TOKEN$.c_str());}
 Y(int y) -> q {printf("%d", y);}
-q -> "n"
+q -> "(\\w+)\\s*"

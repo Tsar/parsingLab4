@@ -32,7 +32,11 @@ class Grammar {
 public:
     Grammar(std::string const& name)
         : dirName_(name + "_parser")
-        , testsFileName_(name + "_tests.txt") {
+        , testsFileName_(name + "_tests.txt")
+        , inHeadersBlock_(false)
+        , inMembersBlock_(false)
+        , headersBlock_("")
+        , membersBlock_("") {
         std::ifstream f(name.c_str());
         int lineNum = 0;
         while (!f.eof()) {
@@ -301,8 +305,32 @@ private:
     }
     
     void parseNewRule(std::string const& s, int lineNum) {
+        if (inHeadersBlock_) {
+            if (s.substr(0, 10) == "[/headers]") {
+                inHeadersBlock_ = false;
+                return;
+            } else {
+                headersBlock_ += s + "\n";
+            }
+        }
+        if (inMembersBlock_) {
+            if (s.substr(0, 10) == "[/members]") {
+                inMembersBlock_ = false;
+                return;
+            } else {
+                membersBlock_ += s + "\n";
+            }
+        }
         if (s == "")
             return;
+        if (s.substr(0, 9) == "[headers]") {
+            inHeadersBlock_ = true;
+            return;
+        }
+        if (s.substr(0, 9) == "[members]") {
+            inMembersBlock_ = true;
+            return;
+        }
         size_t p1 = s.find("->");
         if (p1 == std::string::npos) {
             std::cerr << "Rule on line " << lineNum << " incorrect (doesn't have '->')" << std::endl;
@@ -387,12 +415,22 @@ private:
         }
         f.close();
         
+        substitutions_["@HEADERS_BLOCK@"] = headersBlock_;
+        substitutions_["@MEMBERS_BLOCK@"] = membersBlock_;
+        
+        size_t p;
         for (std::map<std::string, std::string>::const_iterator it = substitutions_.begin(); it != substitutions_.end(); ++it) {
-            size_t p = fileContents.find(it->first);
+            p = fileContents.find(it->first);
             while (p != std::string::npos) {
                 fileContents.replace(p, it->first.length(), it->second);
                 p = fileContents.find(it->first, p + 1);
             }
+        }
+        std::string def_LAST_TOKEN = "$LAST_TOKEN$";
+        p = fileContents.find(def_LAST_TOKEN);
+        while (p != std::string::npos) {
+            fileContents.replace(p, def_LAST_TOKEN.length(), "lex_->curTokenValue()");
+            p = fileContents.find(def_LAST_TOKEN, p + 1);
         }
         
         std::ofstream g(dest.c_str());
@@ -453,6 +491,8 @@ private:
     std::map<std::string, std::string> substitutions_;
     std::map<int, std::set<int> > FIRST;
     std::map<int, std::set<int> > FOLLOW;
+    bool inHeadersBlock_, inMembersBlock_;
+    std::string headersBlock_, membersBlock_;
 };
 
 int main(int argc, char* argv[]) {
