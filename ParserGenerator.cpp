@@ -46,6 +46,9 @@ public:
         }
         f.close();
         fromNumber_[-1] = "eps";
+        lastSubstitutions_.insert(std::make_pair("$LAST_TOKEN$", "lex_->curTokenValue()"));
+        lastSubstitutions_.insert(std::make_pair("$BEGIN_SCOPE$", "{"));
+        lastSubstitutions_.insert(std::make_pair("$END_SCOPE$", "}"));
     }
     
     ~Grammar() {
@@ -414,19 +417,19 @@ private:
         substitutions_["@HEADERS_BLOCK@"] = headersBlock_;
         substitutions_["@MEMBERS_BLOCK@"] = membersBlock_;
         
-        size_t p;
         for (std::map<std::string, std::string>::const_iterator it = substitutions_.begin(); it != substitutions_.end(); ++it) {
-            p = fileContents.find(it->first);
+            size_t p = fileContents.find(it->first);
             while (p != std::string::npos) {
                 fileContents.replace(p, it->first.length(), it->second);
                 p = fileContents.find(it->first, p + 1);
             }
         }
-        std::string def_LAST_TOKEN = "$LAST_TOKEN$";
-        p = fileContents.find(def_LAST_TOKEN);
-        while (p != std::string::npos) {
-            fileContents.replace(p, def_LAST_TOKEN.length(), "lex_->curTokenValue()");
-            p = fileContents.find(def_LAST_TOKEN, p + 1);
+        for (std::map<std::string, std::string>::const_iterator it = lastSubstitutions_.begin(); it != lastSubstitutions_.end(); ++it) {
+            size_t p = fileContents.find(it->first);
+            while (p != std::string::npos) {
+                fileContents.replace(p, it->first.length(), it->second);
+                p = fileContents.find(it->first, p + 1);
+            }
         }
         
         std::ofstream g(dest.c_str());
@@ -485,6 +488,7 @@ private:
     std::set<int> terms_;
     std::vector<std::string> userCode_;
     std::map<std::string, std::string> substitutions_;
+    std::map<std::string, std::string> lastSubstitutions_;
     std::map<int, std::set<int> > FIRST;
     std::map<int, std::set<int> > FOLLOW;
     bool inHeadersBlock_, inMembersBlock_;
