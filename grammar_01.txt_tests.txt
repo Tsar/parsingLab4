@@ -1,0 +1,107 @@
+n
+n n +
+n n *
+n n - n +
+n + +
+n n n * *
+n abcd
+n n + n + n + n + n n - *
+n n n * * n * n * n n + -
+n n n n - * + n + n - n *
+n n + n * n * n * n * n n + *
+n n n * n n + n + n * * n * n + *
+n n + n + n + n n - n + - n + n +
+n n n * + n n * n * - n n * * n n + -
+n n + n - n n n + + n - * n - n * n -
+n n - n - n n + - n n * * n n n n + + + -
+n n + n * n - n n - n - - n - n - n * n +
+n n n n - * n + - n n n * n - n n - n * n * + + +
+n n * n - n + n n + n - - n + n * n * n * n -
+n n - n n * * n + n + n * n n + + n - n - n *
+n n n n * + - n + n * n n n n + + * * n * n - n +
+n n + n n + n + + n * n * n * n + n n - n * - n n * +
+n n * n * n + n + n + n + n + n + n + n n n + n + - +
+n n + n * n * n n + n n - n * - n n * + * n - n n + -
+n n + n + n n - n n + n * - + n n * n - n + * n * n * n +
+n n n - * n n n n n n - + + - n n + n + - n n - - * + n -
+n n * n - n n + n n + * n * * n n - + n * n n + * n * n n * *
+n n + n + n - n n n * + - n * n + n n n + - * n * n + n n - n + +
+n n - n - n * n + n * n n + n * - n * n + n n * n * - n + n + n *
+n n + n n n * + + n n * n n n - n * n n - + n n * - n n * + n + - + +
+n n * n + n * n * n * n - n * n + n * n n + + n n + - n n n n * + n + + -
+n n n n n + * + - n - n * n n + - n - n n * * n + n * n + n + n - n n - *
+n n - n + n - n + n + n - n - n * n * n * n n n - * + n n + * n * n - n *
+n n * n - n * n * n n n - + - n - n + n + n * n n - n + - n n n * n + * *
+n n * n - n n n - * * n * n * n * n + n n * + n n n n - + n * - * n n + - n -
+n n * n - n - n n - n - - n + n + n n + + n * n * n + n n + n * + n n * + n -
+n n * n n n n - + n + * - n n * * n n + * n n * n n n - * * * n + n * n n * - n *
+n n n * + n - n n + n n n n - n - + * + n + + n n * n - - n n n * - - n n n n * - - *
+n n - n - n - n + n n * * n - n - n + n + n + n - n * n * n n * * n - n n n * + * n -
+n n n * n - * n n + + n n n n n + n n - n - - - * - n + * n * n + n - n - n - n * n +
+n n n n n + * n * n - * + n - n - n + n * n n n * * * n * n + n - n - n + n n n * n - n + * *
+n n n * * n n * + n - n + n * n + n n - n * n - - n n + * n + n n + - n + n n + n + - n -
+n n - n * n - n + n - n * n * n * n * n n n * n * n n - - n n n n - - * * * n - + n n n + * +
+n n + n * n - n * n n * * n n n n + - * + n n - * n * n n + - n - n + n * n + n - n - n - n +
+n n - n n * + n * n n n - + n * n * n * * n * n * n n n + n * n + - * n n - + n + n - n * n n - +
+n n - n n n n n * - - * n * * n + n n - n + n n - + n n * + n + * n n * - n * n + n + n * n + n n + +
+n n n + - n n - - n n + - n * n n n - n n + n n - * + n + n + + - n * n * n - n - n n - - n + n * n +
+n n - n - n n + n - - n n n * - - n + n * n n n + * n * * n + n n - - n n + n * n + * n - n n + - n +
+n n n + + n * n - n n + * n * n n - + n n + n - n - * n n * n + n n n - + n - - * n - n - n * n n + n - +
+n n - n - n + n - n + n n - n n * n - - - n * n n n + - * n - n n n + n * * n n - + * n * n + n - n - n n - +
+n n + n - n + n - n + n n n - - * n - n * n * n * n + n * n n n * + n n n n * - n - n * * n - - + n + n * n +
+n n * n * n + n + n n + * n n n + - n - - n + n * n * n * n n + - n * n + n - n + n n - - n n * * n + n + n +
+n n n n - n - + * n + n * n * n * n n + n * - n n - * n + n n n + * - n n n n n + n n * - - - + * n - n n n n n * * * * *
+n n * n - n n * + n + n n n n + - + n * + n n n * * * n + n * n n n - + n - - n - n - n * n + n - n * n - n * n n + *
+n n * n + n + n n * * n * n n * n n * n * - n + * n - n * n n n n - + - - n - n n * + n n n - n n - + n n n n n * * - * - - +
+n n - n * n n * * n n n + n - n n * * + n * - n n n - n n - n * - - - n - n - n + n n * n + n + n + n - - n - n + n n + -
+n n + n + n n + * n + n n + - n * n n n n n * n n + - - n + n + + - * n + n n n + n - - - n * n + n - n * n + n - n - n -
+n n n - + n - n n * n * * n * n - n * n * n n + n + + n + n - n - n - n n - * n * n + n n + n - - n - n * n n + - n * n *
+n n n n * * - n n + - n * n n - * n - n - n * n * n * n + n n * - n n n + n * + + n n - - n - n + n * n + n n - - n * n * n +
+n n - n * n n n - n - - * n n + - n * n n * n n + n + * + n - n * n + n n n n * + * n + n - - n - n * n n * * n * n n n * n * * +
+n n * n * n + n n + + n * n - n + n * n * n * n n - - n * n n n + * n n + - * n * n - n + n n - * n + n * n + n n + + n * n n n * * *
+n n + n * n + n - n + n - n n n n n + + * n n n - - + + - n - n - n + n n n - n n n - + * n + + - n n * n n - * - n + n * n * n -
+n n + n n - * n * n - n - n n * n n - + * n + n - n + n n n + - + n n + n n n n - + + + * n * n * n - n - n n * + n n - n + + n - n *
+n n - n * n + n n n n * + n n + * * * n n - * n n n * + - n - n + n + n - n n - * n n - + n * n n - * n + n + n + n + n * n n - - n +
+n n + n n n * + * n + n - n * n * n * n n - + n + n + n n * - n n n * n + - n - + n - n + n n * n n * * n + + n - n * n - n n n * n * + *
+n n + n n + + n - n + n - n - n n + n - n * + n + n - n * n + n n n n n * + + - n * n * n + n + * n n * * n n + - n + n n - n n n - n * + + *
+n n + n n * * n + n + n + n + n - n n * * n n n + n + * * n * n n * * n n + n - * n + n n * + n n - n n n * * * * n - n + n + n n n n + - * *
+n n * n + n - n * n + n * n - n + n n n * + + n + n - n n - * n - n n - + n n + - n * n n n - n - + * n + n - n - n n - + n - n * n + n - n *
+n n n n - * n + + n - n - n - n - n - n - n * n + n * n n n n + * * - n - n - n n + - n * n n - - n + n * n + n + n * n n * n - * n - n + n n n * - -
+n n * n n * n * n n + n - - - n - n * n + n + n - n - n n n n n + - - * - n n n n - + * * n + n + n - n * n - n * n n - - n + n * n - n n - n + n - -
+n n * n n - + n + n - n n + + n + n * n * n - n - n - n * n * n + n * n * n * n - n + n * n n - * n * n * n + n * n - n + n * n * n + n - n * n + n -
+n n * n + n n n n + * + * n - n n n * + * n - n * n n * * n n * + n + n * n - n * n n n - n * * n n n * n n + n * n * + n * * n n + - - + n n + + n *
+n n n n - * * n * n n + n * + n - n * n n n - n * - - n - n n + - n n + * n + n + n - n + n n - * n + n n n - - n + * n * n - n + n n n * + - n + n - n +
+n n + n n n * * + n * n - n + n - n - n + n + n * n + n - n n n + n * + + n * n - n n * - n - n + n n - n * + n + n n n n n * n * n - * + n * n * * * n n * +
+n n n n - * + n n n * + * n - n * n n * + n - n * n n + * n + n - n * n n n * n + + * n - n + n * n - n + n * n n n * - n + * n * n - n * n + n + n n n + * -
+n n - n + n - n - n n - n + * n n - - n * n n + - n n n - + * n * n - n + n - n * n + n - n * n + n * n n n n - - * n n + n + n * n + - n n + + * n + n - n -
+n n + n - n + n + n - n n * n n * n * n n * * n * + * n - n n * * n n - - n * n n - - n n n n * * * n - - n * n - n n - n + - n + n * n n + + n n n * - + n + n +
+n n * n - n n - - n * n * n * n + n * n * n - n - n - n * n * n + n - n * n + n + n - n - n + n - n - n + n n - * n - n n * * n n * * n + n * n - n + n + n n - *
+n n + n + n * n + n n - + n * n n + + n + n - n + n - n * n n + + n - n n * n + + n - n - n n + + n + n * n - n * n n + + n - n n + - n - n n n - + * n n - n n - - -
+n n n - + n + n - n n n - + + n * n n + - n + n n n - n n - n n + n + + + n n n + - + n + n * - * n n + * n * n n n n * + + n n - - n * n + - n n n n - - n + - + n *
+n n n * n - n - * n + n n + - n n - + n n * + n n + + n n + - n - n n + + n n + n n + n + + + n + n n * + n + n + n - n * n + n * n + n - n n - n n + - + n - n n n - * +
+n n - n + n * n * n n n - - - n - n + n * n n * - n - n + n n - n + - n - n - n * n + n n * * n - n * n * n + n n n + - n - + n n + - n * n + n n * * n + n * n n + n - n * *
+n n * n + n * n n + + n n + + n * n + n - n * n * n * n n * * n n + n n n + n - * * * n * n - n * n n + - n * n + n * n - n + n * n - n - n n - + n + n n * - n n + * n - n +
+n n n - + n + n n - * n n - * n n n * n - n - - + n + n n * + n * n n * n - * n * n - n n - n n + + - n + n + n n n * n + * - n * n * n + n n n * * * n - n - n - n - n * n *
+n n + n * n * n n - + n n n + n * - n n + + + n n n * * * n n - + n - n * n * n n - * n n + * n + n * n + n * n n + * n n + - n + n * n n + n - + n - n n - + n * n * n * n - n -
+n n n + n - n n * n * + * n * n + n n - + n + n * n - n n n - n - + * n n n n + - * n n + + - n - n n * - n - n * n - n * n n - * n n n n - - * + n - n * n n * + n n * * n * n -
+n n * n + n n - + n n - n n * n * * n n - * * n - n - n + n - n + n + n * n n * * n n n - - * n * n n n n n n + + * n + - - - n * n * n - n * n + n n * + n * n * n + n * n - n * n +
+n n - n - n - n + n - n + n * n + n * n n n * * + n + n - n - n n * - n n + + n - n n n - + * n n n n n n - + - + + n n - * - n n n - + n + * n * n n + * n * n * n n + + n n + n - -
+n n + n * n n + n - n - - n + n * n * n - n * n * n - n + n - n * n * n * n * n * n + n * n - n n n * - n * - n - n * n * n - n - n * n + n + n n - * n n n * n n - - - * n + n n + - n +
+n n n * n n n n n * + + * - + n * n * n n + + n + n + n n - * n * n + n - n - n - n * n n - * n n n - * - n n * n * n n - n + + * n n n n - + + + n + n * n - n n - n + * n - n - n n * n - *
+n n - n - n n n - n + + - n - n + n n * n - + n * n - n * n n + * n n + - n + n n * n n - + n - - n + n n * n - * n - n n + - n * n - n - n n + * n + n - n - n * n - n + n n + * n n + - n -
+n n + n n + * n n - + n + n - n * n + n + n * n * n + n - n n + n * - n n * - n + n n + + n n + n n n - n * * + + n n * n + - n - n + n n * * n n n + * - n * n n - * n - n n n n - n n + + n + - - -
+n n * n n + - n * n + n + n + n n * n n * - * n * n * n - n n * n + * n n - * n n - n * + n n + n * + n - n n - * n + n * n n n + - * n * n + n - n - n - n n * - n n n - n n n n + * + + n n n + - - - +
+n n n + + n n + + n * n + n * n - n * n - n n * * n - n n n - n * + - n n - n n n * * + * n * n n * - n - n * n - n n - + n * n n * * n - n * n * n + n n * - n - n + n n n + n - n + n + * + n *
+n n - n n - - n * n * n + n - n n - - n * n + n - n * n * n * n - n * n n * n n + * n - - n + n * n - n - n n + n n * * n - * n + n * n + n * n - n n n * * * n n + - n * n * n * n + n n * * n + n *
+n n * n - n - n - n - n n * - n + n n + - n * n * n - n - n - n n - + n - n n - * n * n * n n - n + - n - n * n + n + n n n - + * n n + * n + n * n * n * n n - n n + n - * n n n * n + - - - n + n *
+n n - n + n - n + n - n n * - n - n n n + - + n n n * * n + * n - n - n - n + n + n n - * n - n + n n + * n * n - n - n * n * n n - - n n - n * + n * n * n n n + - - n - n + n + n * n - n + n n * n - -
+n n * n - n * n n * * n * n * n * n + n * n n - n * - n n * n * n + + n - n + n * n + n - n * n n - * n n n + * + n n n - - - n * n n + - n n n + * - n + n + n - n * n - n + n + n n - + n n - n - n n + * -
+n n n - * n n * + n * n + n - n * n - n + n - n n * * n * n * n n * - n - n n n * n n - n + n n - - + - + n + n * n * n * n + n - n n n + + n n + * n n + n + * * n n + - n - n n n + - * n - n n * n + * n +
+n n * n n * * n + n n - - n - n - n - n * n + n + n - n * n - n n n n * + - + n * n + n - n n + n - - n n n * * + n n - - n + n n n * * n + * n n + + n n * - n n * n * + n n * - n * n * n * n n + + n - n +
+n n - n n - n * - n - n + n - n - n + n * n + n * n * n n * n n - n * + + n + n + n n - n * * n * n + n * n n n n n - - + * + n - n + n - n n - * n n n n n + + + n n * * + n * * n + n n * - n + n n n - * * n -
+n n n + * n * n * n n n n - + n - - n + * n + n + n - n * n - n + n - n n n + + n n + - * n * n * n * n - n + n - n n n n - + - * n - n * n * n + n n n n n - - n - n + n - + n - * + n - n n - - n n - * n - n n - -
+n n n + + n + n - n * n + n - n + n + n - n + n - n n n * - * n n - n - * n - n n n n n n - + - - n n - - * + n n - - n * n n - - n n + + n * n + n n n * n n * * * * n * n n n n n n n * + n - - - * * * n - n + n -
+n n n * + n n - + n n n - n n + n * - - n + n - - n n + - n + n * n n * - n + n - n * n * n - n n * + n + n + n + n n * n - - n * n - n - n - n n * * n - n - n n + n n n n - - n + + * + n n n - n + * - n - n * n n + -
+n n n + - n * n - n * n + n - n n - - n - n + n n * - n + n - n + n - n + n + n n n * + * n n - + n n - - n - n * n n n - + n - - n + n * n n - n + + n n * - n + n - n * n n * - n - n + n * n + n + n - n + n * n - n +
+n n - n - n * n * n - n - n * n - n n n n n n - + - * - + n * n n + + n + n - n - n + n - n n * n - * n * n n + * n + n - n n n n n * n - + n - * - + n + n + n + n - n + n * n * n + n * n - n - n n + - n + n n - + n *
+n n * n - n * n * n * n + n - n n * - n n * n - n + + n n n * + n - - n n - n + * n n n - + - n - n * n * n + n - n + n * n + n + n n * * n + n - n * n + n + n n + - n n * n * * n * n * n - n + n - n n n * - n n n * - n - - *

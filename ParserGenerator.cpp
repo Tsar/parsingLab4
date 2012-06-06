@@ -30,7 +30,8 @@ void setUnion(std::set<T>& targetSet, std::set<T> const& otherSet) {
 class Grammar {
 public:
     Grammar(std::string const& name)
-        : dirName_(name + "_parser") {
+        : dirName_(name + "_parser")
+        , testsFileName_(name + "_tests.txt") {
         std::ifstream f(name.c_str());
         int lineNum = 0;
         while (!f.eof()) {
@@ -51,13 +52,16 @@ public:
             return;
         }
         
+        mkdir(dirName_.c_str(), 0777);
+        substitutions_.clear();
+        copyAndDoSubstitutions(testsFileName_, dirName_ + "/tests.txt");  //copying tests, no substitutions are made here really
+        
         gen_TOKENS();
         gen_CUR_CHAR_SWITCH();
         gen_NONTERMS_FUNC_DECLARATIONS();
         gen_START();
         gen_NONTERMS_FUNC_DEFINITIONS();
         
-        mkdir(dirName_.c_str(), 0777);
         std::ifstream templatesListFile("ParserGeneratorTemplates/TemplatesList.txt");
         while (!templatesListFile.eof()) {
             std::string s;
@@ -229,35 +233,41 @@ private:
                     int x = 0;
                     while (nonTermRules_[j].rightIsUserCode[x])
                         ++x;
+                    
                     int alpha = nonTermRules_[j].right[x];
+                    std::set<int> iterateOver;
                     if (FIRST[alpha].find(-1) == FIRST[alpha].end()) {
-                        for (std::set<int>::const_iterator it = FIRST[alpha].begin(); it != FIRST[alpha].end(); ++it) {
-                            sprintf(buf, "        case TOKEN_%d:\n", *it);
-                            res += buf;
-                            for (int k = 0; k < nonTermRules_[j].right.size(); ++k) {
-                                if (nonTermRules_[j].rightIsUserCode[k]) {
-                                    res += "            " + userCode_[nonTermRules_[j].right[k]] + "  //user code\n";
+                        iterateOver = FIRST[alpha];
+                    } else {
+                        iterateOver = FIRST[alpha];
+                        iterateOver.erase(-1);
+                        setUnion(iterateOver, FOLLOW[nonTermRules_[j].left]);
+                    }
+                    
+                    for (std::set<int>::const_iterator it = iterateOver.begin(); it != iterateOver.end(); ++it) {
+                        sprintf(buf, "        case TOKEN_%d:\n", *it);
+                        res += (*it == -2) ? "        case END:\n" : buf;
+                        for (int k = 0; k < nonTermRules_[j].right.size(); ++k) {
+                            if (nonTermRules_[j].rightIsUserCode[k]) {
+                                res += "            " + userCode_[nonTermRules_[j].right[k]] + "  //user code\n";
+                            } else {
+                                int X = nonTermRules_[j].right[k];
+                                res += "            //" + fromNumber_[X] + "\n";
+                                if (terms_.find(X) != terms_.end()) {
+                                    char buf2[1024];
+                                    sprintf(buf2, "TOKEN_%d", X);
+                                    std::string sbuf2 = (X == -2) ? "END" : buf2;
+                                    res += "            if (lex_->curToken() != " + sbuf2 + ")\n                throw ParseException(\"Terminal '" + fromNumber_[X] + "' expected at position\", lex_->curPos() - 1);\n";
+                                    res += "            res->addChild(new Tree(\"" + fromNumber_[X] + "\"));\n            lex_->nextToken();\n";
                                 } else {
-                                    int X = nonTermRules_[j].right[k];
-                                    res += "            //" + fromNumber_[X] + "\n";
-                                    if (terms_.find(X) != terms_.end()) {
-                                        char buf2[1024];
-                                        sprintf(buf2, "TOKEN_%d", X);
-                                        std::string sbuf2 = buf2;
-                                        res += "            if (lex_->curToken() != " + sbuf2 + ")\n                throw ParseException(\"Terminal '" + fromNumber_[X] + "' expected at position\", lex_->curPos() - 1);\n";
-                                        res += "            res->addChild(new Tree(\"" + fromNumber_[X] + "\"));\n            lex_->nextToken();\n";
-                                    } else {
-                                        char buf2[1024];
-                                        sprintf(buf2, "NONTERM_%d", X);
-                                        std::string sbuf2 = buf2;
-                                        res += "            res->addChild(" + sbuf2 + "());\n";
-                                    }
+                                    char buf2[1024];
+                                    sprintf(buf2, "NONTERM_%d()", X);
+                                    std::string sbuf2 = (X == -1) ? "new Tree(\"eps\")" : buf2;
+                                    res += "            res->addChild(" + sbuf2 + ");\n";
                                 }
                             }
-                            res += "            break;\n";
                         }
-                    } else {
-                        
+                        res += "            break;\n";
                     }
                 }
                 res += "        default:\n            throw ParseException(\"Unexpected token at position\", lex_->curPos() - 1);\n    }\n    return res;\n}\n\n";
@@ -385,7 +395,7 @@ private:
         }
     }
 
-    std::string dirName_;
+    std::string dirName_, testsFileName_;
     std::map<std::string, int> toNumber_;
     std::map<int, std::string> fromNumber_;
     std::vector<NonTermRule> nonTermRules_;
