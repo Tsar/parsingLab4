@@ -13,15 +13,13 @@ public:
     LexicalAnalyzer(std::string const& input);
     void nextToken();
     Token curToken() const;
+    std::string curTokenValue() const;
     int curPos() const;
 private:
-    bool isBlank(char c) const;
-    void nextChar();
-
     std::string input_;
-    char curChar_;
     int curPos_;
     Token curToken_;
+    std::string curTokenValue_;
 };
 
 #endif //_LEXICAL_ANALYZER_H_

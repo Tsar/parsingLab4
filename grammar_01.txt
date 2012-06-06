@@ -1,8 +1,5 @@
 E -> n {//printf("abacaba");} E'
 E' -> E o {//readyToUseMe = true;} E' {//code.insert("xx");}
 E' -> {//xxx = xyz;}eps
-n -> "n"
-o -> "+"
-o -> "-"
-o -> "*"
-o -> "&&&"
+n -> "(-?\\d+)\\s*"
+o -> "(\\+|-|\\*)\\s*"
