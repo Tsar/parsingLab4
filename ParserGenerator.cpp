@@ -306,20 +306,18 @@ private:
     
     void parseNewRule(std::string const& s, int lineNum) {
         if (inHeadersBlock_) {
-            if (s.substr(0, 10) == "[/headers]") {
+            if (s.substr(0, 10) == "[/headers]")
                 inHeadersBlock_ = false;
-                return;
-            } else {
+            else
                 headersBlock_ += s + "\n";
-            }
+            return;
         }
         if (inMembersBlock_) {
-            if (s.substr(0, 10) == "[/members]") {
+            if (s.substr(0, 10) == "[/members]")
                 inMembersBlock_ = false;
-                return;
-            } else {
+            else
                 membersBlock_ += s + "\n";
-            }
+            return;
         }
         if (s == "")
             return;
