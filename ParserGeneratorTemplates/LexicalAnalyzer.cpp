@@ -12,6 +12,13 @@ LexicalAnalyzer::LexicalAnalyzer(std::string const& input)
 }
 
 void LexicalAnalyzer::nextToken() {
+    if (input_.length() == 0) {
+        curToken_ = END;
+        curTokenValue_ = newTokenValue_;
+        newTokenValue_ = "";
+        return;
+    }
+    boost::smatch regexMatchResults;
 @REGEX_MATCH_TRIES@
 }
 

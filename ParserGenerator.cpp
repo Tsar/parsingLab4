@@ -118,8 +118,6 @@ private:
     void gen_REGEX_MATCH_TRIES() {
         std::string res = "";
         
-        res += "    if (input_.length() == 0) {\n        curToken_ = END;\n        curTokenValue_ = \"\";\n        return;\n    }\n";
-        res += "    boost::smatch regexMatchResults;\n";
         for (int i = 0; i < termRules_.size(); ++i) {
             char buf[1024];
             sprintf(buf, "TOKEN_%d", termRules_[i].left);
